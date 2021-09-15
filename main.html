@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Dream Aawas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
+
+<style type="text/css">
+  body{
+    background-color:black;
+  }
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    margin:10px;
+    padding:30px;
+}
+
+.button {
+   /* position: absolute;
+    top: 50%;*/
+    animation: mymove1 5s infinite;
+}
+  
+  .heading{
+   /* position: absolute;
+    top: 46%;*/
+    color:white;
+  }
+  
+#view_btn{
+  font-size: 40px;
+  animation: pulse 1s ease-in infinite;
+}
+  
+  @keyframes pulse{
+  25%  {transform: scale(0.9);}
+  75%  {transform: scale(1.1);}
+}
+@keyframes push{
+  50%  {transform: scale(0.8);}
+}
+@keyframes pop{
+  50%  {transform: scale(1.2);}
+}
+
+  
+
+
+</style>
+
+</head>
+<body>
+
+  <!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Dream Aawas</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">360 Tour</a>
+        </li>      
+      </ul>
+      <form class="d-flex">
+       <button class="btn btn-outline-success" type="submit">About</button> 
+        <button class="btn btn-outline-success" type="submit">Location</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+-->
+  <h1 style="color:white;font-size:90px;text-align: center;font-weight:bold;font-family:Bodoni ">
+    Dream Aawas
+  </h1>
+
+<div>
+  <img id="building_img" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fsite%20plan%20%20final%20copy%20(1).jpg?v=1628677132172" style="width:100vw;height:900px;">
+</div>
+
+<div class="wrapper">
+    <h1 id="view_btn1" class="heading bg-dark" style="font-size:40px">
+      Start Your Virtual Tour
+  </h1>
+    <a href="https://fire-speckle-machine.glitch.me/" class="button btn btn-warning" id="view_btn" style="font-weight:bold;margin-left:50px">NOW</a>
+</div>
+
+
+</body>
+</html>
