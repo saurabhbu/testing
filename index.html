@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>360 image NCX</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+	<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script> 
+  <script src="https://unpkg.com/aframe-transparent-video-shader@1.0.3/dist/aframe-transparent-video-shader.umd.js"></script>
+	<script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+  <script src="camera_controll.js"></script>
+  <script src="jquery.rwdImageMaps.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+	<!--animation component script-->
+<script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
+    
+<script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+    <script>
+      var x=0;
+      AFRAME.registerComponent('hotspots',{
+        init:function(){
+            this.el.addEventListener('reloadspots',function(evt){
+            
+            //get the entire current spot group and scale it to 0
+            var currspotgroup=document.getElementById(evt.detail.currspots);            
+            currspotgroup.setAttribute("scale","0 0 0");
+            
+            //get the entire new spot group and scale it to 1
+            var newspotgroup=document.getElementById(evt.detail.newspots);           
+            newspotgroup.setAttribute("scale","1 1 1");             
+            
+          });
+        }
+      });
+      AFRAME.registerComponent('spot',{
+        
+        schema:{
+          linkto:{type:"string",default:""},
+          spotgroup:{type:"string",default:""}
+          
+        },
+        init:function(){
+           
+          //add image source of hotspot icon
+          this.el.setAttribute("src","#hotspot");
+          //make the icon look at the camera all the time
+         // this.el.setAttribute("look-at","#cam");
+          
+          $('#test7').attr('src', 'https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FCapture.PNG?v=1631438092291');
+          
+          var data=this.data;
+          
+          this.el.addEventListener('click',function(){
+            //set the skybox source to the new image as per the spot  
+           
+           
+            var sky=document.getElementById("skybox");
+            
+            play();
+            
+            var spotcomp=document.getElementById("spots");
+            var currspots=this.parentElement.getAttribute("id");
+            
+            //create event for spots component to change the spots data
+            
+            
+            if(x>0){
+          changeimage();
+          setTimeout(function() {
+           sky.setAttribute("src",data.linkto);
+              spotcomp.emit('reloadspots',{newspots:data.spotgroup,currspots:currspots});
+                }, 1000);
+             /* sky.setAttribute("src",data.linkto);
+              spotcomp.emit('reloadspots',{newspots:data.spotgroup,currspots:currspots});*/
+            }
+            
+            x++;         
+          
+            
+          });
+          
+         /* this.el.addEventListener('mouseenter',function(){
+            this.setAttribute("scale","5 5 5");
+          });
+          
+          this.el.addEventListener('mouseleave',function(){
+            this.setAttribute("scale","4 4 4");
+          });*/
+          
+         
+        }
+      });
+    
+       function play() {
+        var audio = document.getElementById("audio");
+        audio.play();
+      }
+      var a=0;     
+      
+      function AR_view(){
+        $("#cam").attr("look-controls","touchEnabled: false");
+        $("#cam").removeAttr("touch-look-controls");        
+      }
+      
+      function touch(){
+        $("#cam").attr("touch-look-controls","");
+        $("#cam").removeAttr("look-controls");
+      }
+      
+      function open_info(){
+        $('#info_tab').toggle(1000);          
+      }
+      
+      function close_info(){
+        $('#info_tab').hide();        
+      }
+      
+      function playbg() {
+        var audio = document.getElementById("audiobg");
+        audio.play();
+      }
+      
+      function onPageload(){
+        $('#loading_icon').hide();  
+      }
+      
+      function mute_unmute(){
+              if(document.getElementById('audiobg').muted == true){
+                document.getElementById('audiobg').muted = false;
+                 $('#volume_up').show();     
+                $('#volume_down').hide();
+              } else {
+                document.getElementById('audiobg').muted = true;
+                $('#volume_up').hide();     
+                $('#volume_down').show();
+              }
+
+        }
+      
+      
+      /*
+      function Gallery_view(){
+        
+        var e = document.getElementById("gallary");
+        var view_name = e.value;
+        console.log(view_name);
+        
+        var currspotgroup1 = document.getElementById("group-point1");
+        var currspotgroup2 = document.getElementById("group-point2");
+        var currspotgroup3 = document.getElementById("group-point3");
+        var currspotgroup4 = document.getElementById("group-point4");
+        var currspotgroup5 = document.getElementById("group-point5");
+        var currspotgroup6 = document.getElementById("group-point6");
+        var currspotgroup7 = document.getElementById("group-point7");
+        
+        currspotgroup1.setAttribute("scale","0 0 0");
+        currspotgroup2.setAttribute("scale","0 0 0");
+        currspotgroup3.setAttribute("scale","0 0 0");
+        currspotgroup4.setAttribute("scale","0 0 0");
+        currspotgroup5.setAttribute("scale","0 0 0");
+        currspotgroup6.setAttribute("scale","0 0 0");
+        currspotgroup7.setAttribute("scale","0 0 0");
+        
+        if(view_name=="img1" || document.getElementById('firstviewImg').clicked == true){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point1");                
+           //currspotgroup1.setAttribute("scale","0 0 0");
+           currspotgroup1.setAttribute("scale","1 1 1");
+        }
+        
+        if(view_name=="img2" || document.getElementById('seoncdviewImg').clicked == true){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point2");                
+           //currspotgroup1.setAttribute("scale","0 0 0");
+           currspotgroup2.setAttribute("scale","1 1 1");
+        }
+        
+        if(view_name=="img3" || document.getElementById('thirdviewimg').clicked == true){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point3");                
+           //currspotgroup1.setAttribute("scale","0 0 0");
+           currspotgroup3.setAttribute("scale","1 1 1");
+        }
+        
+        if(view_name=="img4" || document.getElementById('fourthviewimg').clicked == true){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point4");                
+           //currspotgroup1.setAttribute("scale","0 0 0");
+           currspotgroup4.setAttribute("scale","1 1 1");
+        }
+        
+        if(view_name=="img5" || document.getElementById('fifthviewimg').clicked == true){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point5");                
+           //currspotgroup1.setAttribute("scale","0 0 0");
+           currspotgroup5.setAttribute("scale","1 1 1");
+        }
+        
+        if(view_name=="img6" || document.getElementById('sixthviewimg').clicked == true){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point6");                
+           //currspotgroup1.setAttribute("scale","0 0 0");
+           currspotgroup6.setAttribute("scale","1 1 1");
+        }
+        
+        if(view_name=="img7" || document.getElementById('seventhviewimg').clicked == true){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point7");                
+           //currspotgroup1.setAttribute("scale","0 0 0");
+           currspotgroup7.setAttribute("scale","1 1 1");
+        }
+        
+       
+      }*/
+      
+      function Gallery_view_imagclick(x){
+                
+        var currspotgroup1 = document.getElementById("group-point1");
+        var currspotgroup2 = document.getElementById("group-point2");
+        var currspotgroup3 = document.getElementById("group-point3");
+        var currspotgroup4 = document.getElementById("group-point4");
+        var currspotgroup5 = document.getElementById("group-point5");
+        var currspotgroup6 = document.getElementById("group-point6");
+        var currspotgroup7 = document.getElementById("group-point7");
+        var currspotgroup8 = document.getElementById("group-point8");
+        var currspotgroup9 = document.getElementById("group-point9");
+        var currspotgroup10 = document.getElementById("group-point10");
+        var currspotgroup11 = document.getElementById("group-point11");
+        var currspotgroup12 = document.getElementById("group-point12");
+        var currspotgroup13 = document.getElementById("group-point13");
+        var currspotgroup14 = document.getElementById("group-point14");
+        var currspotgroup15 = document.getElementById("group-point15");
+        var currspotgroup16 = document.getElementById("group-point16");
+        var currspotgroup17 = document.getElementById("group-point17");
+        var currspotgroup18 = document.getElementById("group-point18");
+        var currspotgroup19 = document.getElementById("group-point19");
+        var currspotgroup20 = document.getElementById("group-point20");
+        var currspotgroup21 = document.getElementById("group-point21");
+        var currspotgroup22 = document.getElementById("group-point22");
+        var currspotgroup23 = document.getElementById("group-point23");
+        
+        currspotgroup1.setAttribute("scale","0 0 0");
+        currspotgroup2.setAttribute("scale","0 0 0");
+        currspotgroup3.setAttribute("scale","0 0 0");
+        currspotgroup4.setAttribute("scale","0 0 0");
+        currspotgroup5.setAttribute("scale","0 0 0");
+        currspotgroup6.setAttribute("scale","0 0 0");
+        currspotgroup7.setAttribute("scale","0 0 0");
+        currspotgroup8.setAttribute("scale","0 0 0");
+        currspotgroup9.setAttribute("scale","0 0 0");
+        currspotgroup10.setAttribute("scale","0 0 0");
+        currspotgroup11.setAttribute("scale","0 0 0");
+        currspotgroup12.setAttribute("scale","0 0 0");
+        currspotgroup13.setAttribute("scale","0 0 0");
+        currspotgroup14.setAttribute("scale","0 0 0");
+        currspotgroup15.setAttribute("scale","0 0 0");
+        currspotgroup16.setAttribute("scale","0 0 0");
+        currspotgroup17.setAttribute("scale","0 0 0");
+        currspotgroup18.setAttribute("scale","0 0 0");
+        currspotgroup19.setAttribute("scale","0 0 0");
+        currspotgroup20.setAttribute("scale","0 0 0");
+        currspotgroup21.setAttribute("scale","0 0 0");
+        currspotgroup22.setAttribute("scale","0 0 0");
+        currspotgroup23.setAttribute("scale","0 0 0");
+        
+        
+        if(x==1){
+           var x = document.getElementById("skybox").getAttribute("src");  
+          changeimage();
+          setTimeout(function() {
+            $("#skybox").attr("src","#point1");     
+           //currspotgroup1.setAttribute("scale","0 0 0");
+           currspotgroup1.setAttribute("scale","1 1 1");
+                }, 1000); 
+        }
+        
+        if( x==2){
+           var x = document.getElementById("skybox").getAttribute("src");
+          changeimage();
+          setTimeout(function() {
+           $("#skybox").attr("src","#point2");                
+           //currspotgroup1.setAttribute("scale","0 0 0");
+           currspotgroup17.setAttribute("scale","1 1 1");
+              }, 1000); 
+        }
+        
+        if( x==3){
+            var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point3");                
+           currspotgroup16.setAttribute("scale","1 1 1");
+        }
+        
+        if( x==4){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point4");                
+           currspotgroup11.setAttribute("scale","1 1 1");
+        }
+        
+        if( x==5){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point5");                
+           currspotgroup7.setAttribute("scale","1 1 1");
+        }
+        
+        if( x==6){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point6");                
+           currspotgroup6.setAttribute("scale","1 1 1");
+        }
+        
+        if(x==7){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point7");                
+           currspotgroup20.setAttribute("scale","1 1 1");
+        }
+        
+        if(x==8){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point8");   
+          currspotgroup9.setAttribute("scale","1 1 1");
+           
+        }
+        
+        if(x==9){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point9");   
+          currspotgroup14.setAttribute("scale","1 1 1");
+           
+        }
+        
+        if(x==10){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point10");   
+          currspotgroup13.setAttribute("scale","1 1 1");
+           
+        }
+        
+        if(x==11){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point11");   
+          currspotgroup19.setAttribute("scale","1 1 1");
+           
+        }
+        
+        if(x==12){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point12");  
+          currspotgroup22.setAttribute("scale","1 1 1");
+           
+        }
+        
+        if(x==13){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point13");
+          currspotgroup23.setAttribute("scale","1 1 1");
+        }
+        
+         if(x==14){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point14"); 
+           currspotgroup6.setAttribute("scale","1 1 1");
+        }
+        
+        if(x==15){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point15");                        
+        }
+        
+        if(x==16){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point16");                        
+        }
+        
+        if(x==17){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point17");                        
+        }
+        
+        if(x==18){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point18");                        
+        }
+        
+        if(x==19){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point19");                        
+        }
+        
+        if(x==20){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point20");                        
+        }
+        
+        if(x==21){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point21");      
+          currspotgroup5.setAttribute("scale","1 1 1");
+        }
+        
+        if(x==22){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point22");
+          currspotgroup5.setAttribute("scale","1 1 1");
+        }
+        
+        if(x==23){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point23");                        
+        }
+        
+        if(x==24){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point24");                        
+        }
+        
+        if(x==25){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point25"); 
+          currspotgroup3.setAttribute("scale","1 1 1");
+        }
+        
+        if(x==26){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point26");                        
+        }
+        
+        if(x==27){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point27");                        
+        }
+        
+        if(x==28){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point28");                        
+        }
+        
+        if(x==29){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point29");                        
+        }
+        
+        if(x==30){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point30");  
+          currspotgroup2.setAttribute("scale","1 1 1");
+        }
+        
+        if(x==31){
+           var x = document.getElementById("skybox").getAttribute("src");              
+           $("#skybox").attr("src","#point31");  
+          currspotgroup21.setAttribute("scale","1 1 1");
+        }
+        
+       
+      }
+          
+      
+      function toggle_gallery(){
+         $('.dropdown-content').toggle(1000);   
+      }
+      
+      //camera zoom in and out effect 
+  /*    
+      var i=1;
+      function myLoop1() {         
+  setTimeout(function() {  
+    console.log(i);
+    zoom_count="zoom:" + i; 
+    $("#cam").html(zoom_count);  
+    $("#cam").attr("camera",zoom_count); 
+    i++;                    
+    if (i>0 && i < 4) {           
+      myLoop1();              
+    } 
+    if(i==4){
+      i=0;
+     myLoop2();
+    }                     
+  }, 100)
+}
+
+function myLoop2() {         
+  setTimeout(function() { 
+    zoom_count="zoom:" + i; 
+    $("#cam").html(zoom_count); 
+     $("#cam").attr("camera",zoom_count);   
+    i++;                    
+    if (i < 2) {           
+      myLoop2();              
+    }                      
+  }, 100)
+}
+*/
+      
+      
+      
+      //To disable developer options
+      document.onkeydown = function(e) {
+  if(event.keyCode == 123) {
+     return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+     return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+     return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+     return false;
+  }
+  if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+     return false;
+  }
+}
+      
+      
+AFRAME.registerComponent('rotation-reader', {
+  tick: function () {
+    // `this.el` is the element.
+    // `object3D` is the three.js object.
+
+    // `rotation` is a three.js Euler using radians. `quaternion` also available.
+       
+    var xaxis = this.el.object3D.rotation.x;
+    var yaxis= this.el.object3D.rotation.y;
+    // `position` is a three.js Vector3.
+    //console.log(this.el.object3D.position);
+  }
+});
+      
+
+/* button UI and image gallary UI*/      
+      
+      $(document).ready(function(){
+  $("#close_btnMenu").click(function(){
+    $("#Menubtn1").toggle(1000);
+    $("#Menubtn2").toggle(1000);
+    $("#Menubtn3").toggle(1000);
+    $("#Menubtn4").toggle(1000);
+    $("#Menubtn5").toggle(1000);
+  });
+
+  $("#Menubtn3").click(function(){
+    $("#image_gallary").toggle(2000);
+  });
+        
+});
+      
+
+      
+/* for fullscreen option*/
+function toggleFullScreen() {
+  if ((document.fullScreenElement && document.fullScreenElement !== null) ||    
+   (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+    if (document.documentElement.requestFullScreen) {  
+      document.documentElement.requestFullScreen();  
+    } else if (document.documentElement.mozRequestFullScreen) {  
+      document.documentElement.mozRequestFullScreen();  
+    } else if (document.documentElement.webkitRequestFullScreen) {  
+      document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);  
+    }  
+  } else {  
+    if (document.cancelFullScreen) {  
+      document.cancelFullScreen();  
+    } else if (document.mozCancelFullScreen) {  
+      document.mozCancelFullScreen();  
+    } else if (document.webkitCancelFullScreen) {  
+      document.webkitCancelFullScreen();  
+    }  
+  }  
+}
+      
+      
+/* for the new gallery cross button*/
+      
+function openNcloseGallery(){
+              if($("#expand_theGallery").is(":visible") == false){                
+                 $('#expand_theGallery').show();     
+                $('#close_theGallery').hide();
+              } else {                
+                $('#expand_theGallery').hide();     
+                $('#close_theGallery').show();
+              }
+}
+
+/* open and close button for teleport list*/
+    
+function openNcloseList(){
+              if($("#expand_theList").is(":visible") == false){                
+                 $('#expand_theList').show();     
+                $('#close_theList').hide();
+              } else {                
+                $('#expand_theList').hide();     
+                $('#close_theList').show();
+              }
+   var move = document.getElementById('dropdown_menu'); 
+  if (move.offsetLeft == -350) {
+            move.style.left = "0px";
+
+        } else {
+            move.style.left = "-350px";
+        }
+}
+      
+/*zoom camera on mouse scroll*/
+      window.addEventListener("wheel", event => {
+    const delta = Math.sign(event.wheelDelta);
+    //getting the mouse wheel change (120 or -120 and normalizing it to 1 or -1)
+    var mycam=document.getElementById('cam').getAttribute('camera');
+    var finalZoom=document.getElementById('cam').getAttribute('camera').zoom+delta;
+    //limiting the zoom so it doesnt zoom too much in or out
+    if(finalZoom<1)
+      finalZoom=1;
+    if(finalZoom>3)
+      finalZoom=3;  
+
+    mycam.zoom=finalZoom;
+    //setting the camera element
+    document.getElementById('cam').setAttribute('camera',mycam);
+  });
+      
+      /* map setting and javascript*/
+      
+   $(document).ready(function(e){
+    $('img[usemap]').rwdImageMaps();
+  });
+
+  function map(x){    
+      if(x==1){
+        $('#mapImage').attr('src', 'https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fezgif.com-gif-maker%20(1).gif?v=1631372678645');
+      }
+      
+    if(x==2){
+              $('#mapImage').attr('src', 'https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fphoto_2021-09-12_00-10-05.jpg?v=1631385976701');
+    }
+    
+     $("#imagecontainer").toggle(1000);
+      setTimeout(TosetAreaSize, 1050);
+
+      if($("#imagecontainer").css('display') == 'block'){    
+      $("#mapcloseIcon").show();
+      $("#mapicon").hide();
+      }
+    
+      else{
+        setTimeout(test2121, 1050);
+      }    
+          
+      function test2121(){}
+          $("#mapcloseIcon").hide();
+      $("#mapicon").show();
+    }
+
+  function TosetAreaSize(){
+     $(document).ready(function(e){
+    $('img[usemap]').rwdImageMaps();
+  });
+  }
+      
+
+       
+  
+    </script>
+
+  <style>
+    #menu{
+  position: absolute;  
+  z-index: 1;
+  margin-bottom:10px;  
+    }
+    
+  .padding-0{
+    padding-right:0;
+    padding-left:0;
+}
+  
+    #test{
+      transition: width .2s ease-in-out;
+    }
+    
+    #info_tab{
+    width: 400px;
+	height: 300px;
+	background-color: white;	
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+  	
+	margin: auto;
+  z-index: 1;
+  display:none;
+    }
+    
+    #volume_up{
+      display:none;
+    }
+    
+    #loading_icon{
+      width: 400px;
+	height: 300px;
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+  	
+	margin: auto;
+  z-index: 1;
+    }
+    
+ #gallary{
+  position: absolute;  
+  z-index: 1;
+    }
+ 
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+    
+
+/*image gallary and menu*/
+    
+		#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    overflow-y: auto;
+}
+
+#image_gallary{
+	 white-space:nowrap;
+	 overflow-x: auto;
+	 background-color: rgba(112, 104, 103,0.3);
+   border-radius: 5px;
+}
+
+#image_gallary div{
+    padding:0px 10px;
+    white-space:nowrap;
+    overflow:auto;
+    display: inline-block;
+    cursor :pointer;
+   
+}
+
+img{
+	width: 200px;
+	height: 100px;
+	margin-top: 5px;
+  border-radius: 5px;
+}
+
+#image_gallary div p{
+	margin-bottom: 0px;
+text-align: center;
+  color:white;
+}
+
+#UI_buttons{
+	margin: 20px;
+}
+
+.main{
+	width: 100vw;
+	height: 100vh;
+	border: 5px solid black;
+}
+    
+#expand_theGallery{
+  display:none;
+    }
+    
+#close_theList{
+    display:none;   
+    }
+
+#dropdown_menu{
+  position: fixed; 
+  display:block;
+  height:200px;
+  overflow-x: auto;
+  z-index: 1;
+  top:40px; 
+  border:2px solid white;
+  border-radius: 5px;
+  background-color:rgba(0,0,0,0.2);
+  left:-350px;
+   -webkit-transition: 1s;
+            transition: 1s;
+    }
+    
+    #dropdown_menu li a{
+       font-size: 13px;
+    }
+
+    /*scroll bar visible in mobile view*/
+      /* !important is needed sometimes */
+::-webkit-scrollbar {
+    width: 12px !important;
+ }
+
+ /* Track */
+::-webkit-scrollbar-track {
+   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3) !important;
+   -webkit-border-radius: 10px !important;
+   border-radius: 10px !important;
+ }
+
+ /* Handle */
+::-webkit-scrollbar-thumb {
+   -webkit-border-radius: 10px !important;
+   border-radius: 10px !important;
+   background: #ffffff !important; 
+   -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255) !important; 
+
+ }
+::-webkit-scrollbar-thumb:window-inactive {
+   background: #41617D !important; 
+ }
+
+.nav-link{
+  color:white;
+ }
+    
+.material-icons{
+      color:white;
+}
+    
+    /*  map css*/
+ #mapImage{
+        width: 100%;
+        height: 100%;
+    }
+
+    #imagecontainer{
+  position: absolute;
+  margin: auto;
+  display: none;
+  z-index:3;
+    }
+
+     
+  
+  </style>
+  
+  
+</head>
+<body oncontextmenu="return false" onload = "setTimeout('playbg()', 10000);onPageload();lazyImage() " / >
+
+  <img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fezgif.com-gif-maker.gif?v=1629701948486" id="loading_icon">
+
+ <!--  <div id="menu" class="container fixed-bottom pt-2 border rounded">
+  <div class="row justify-content-center">
+    <div class="col ">      
+      <button id="arview" class="btn btn-primary " onclick="AR_view()">
+      <span class="material-icons">&#xe8e1;</span>       
+      </button>
+      </div>
+      <div  class="col ">
+      <button id="touch" class="btn btn-primary" onclick="touch()"> 
+        <span class="material-icons">&#xe9ec;</span>
+      </button>
+        </div>   
+    <div  class="col ">
+      <button id="touch" class="btn btn-primary" onclick="open_info()"> 
+        <span class="material-icons">&#xe88e;</span>
+      </button>
+        </div>  
+    
+    <div  class="col ">
+      <button id="touch" class="btn btn-primary" onclick="mute_unmute()"> 
+        <span class="material-icons" id="volume_up">&#xe050;</span>
+        <span class="material-icons" id="volume_down">&#xe04e;</span>
+      </button>
+        </div>  
+    
+    <div  class="col ">
+      <a href="https://goo.gl/maps/yxQ8859XkS8apUFB7" class="btn btn-primary" target="_blank">
+       <span class="material-icons" >&#xf00f;</span>
+      </a>
+     </div>    
+    
+    </div>
+</div>  -->
+  
+  <!--                    map HTML         -->
+  <div style="width:100%; height:100%;overflow: scroll;" id="imagecontainer">    
+    <button style="position: absolute;z-index:1;bottom:0;right:0" class="btn btn-danger" onclick="map()"> X </button>
+    <img id="mapImage" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fezgif.com-gif-maker%20(1).gif?v=1631372678645" alt="Workplace" usemap="#workmap" width="1080" height="1920">    
+  </div>
+  
+
+
+<map name="workmap">
+  <area shape="rect" coords="547,417,578,453" alt="playroom" href="#" onclick="Gallery_view_imagclick(3);map();">
+  <area shape="rect" coords="497,431,534,457" alt="reading room" href="#" onclick="Gallery_view_imagclick(4);map();">
+  <area shape="rect" coords="474,390,512,423" alt="club house" href="#" onclick="Gallery_view_imagclick(5);map();">
+  <area shape="rect" coords="415,412,446,444" alt="gym" href="#" onclick="Gallery_view_imagclick(8);map();">
+  <area shape="rect" coords="457,520,488,549" alt="outside clubhouse" href="#" onclick="Gallery_view_imagclick(14);map();">
+  <area shape="rect" coords="476,598,508,629" alt="sample flat" href="#" onclick="Gallery_view_imagclick(11);map();">
+  <area shape="rect" coords="301,1140,335,1169" alt="main gate" href="#" onclick="Gallery_view_imagclick(1);map();">
+  <area shape="rect" coords="482,1139,515,1168" alt="infront of main gate" href="#" onclick="Gallery_view_imagclick(30);map();">
+  <area shape="rect" coords="602,1339,634,1369" alt="new B wing" href="#" onclick="Gallery_view_imagclick(25);map();">
+</map>
+  
+  <div id="menu" class="container fixed-bottom pt-2">
+    <!-- new UI buttons  -->
+	<div id="UI_buttons">
+	<!--	<button class="btn" id="Menubtn1" onclick="AR_view()"><span class="material-icons">&#xe8e1;</span> </button>
+		<button class="btn" id="Menubtn2" onclick="touch()"><span class="material-icons">&#xe9ec;</span></button>
+		<button class="btn" id="Menubtn3"><span class="material-icons">&#xe3b6;</span></button>	
+    <button class="btn" id="Menubtn4" onclick="mute_unmute()"><span class="material-icons" id="volume_up">&#xe050;</span><span class="material-icons" id="volume_down">&#xe04e;</span></button>
+    <button class="btn" id="Menubtn5" onclick="toggleFullScreen()"><span class="material-icons">&#xe5d0;</span></button>	
+		<button class="btn" id="close_btnMenu" onclick="close_btnMenu()"><span class="material-icons">&#xe5d2;</span></button>-->	
+    <button class="btn" id="Menubtn4" onclick="mute_unmute()"><span class="material-icons" id="volume_up">&#xe050;</span><span class="material-icons" id="volume_down">&#xe04e;</span></button>
+    <button class="btn" id="Menubtn3" onclick="openNcloseGallery()"><span class="material-icons" id="close_theGallery">&#xe5c9;</span><span class="material-icons" id="expand_theGallery">&#xe5d8;</span></button>	
+    <!--<button class="btn" id="Menubtn3" onclick="map()" ><span class="material-icons" id="mapicon">&#xe55b;</span><span class="material-icons" id="mapcloseIcon" style="display:none;">&#xe888;</span></button>-->
+	</div>   
+
+	<div id="image_gallary">
+		<div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fmain%20gate.jpg?v=1630065867703" onclick="Gallery_view_imagclick(1)" id="firstviewImg"><p>Gate View</p></div>
+		<div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F3copy%20(1).jpg?v=1630065867576" onclick="Gallery_view_imagclick(2)" id="seoncdviewImg"><p>Kids Playroom</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FplayRoom.jpg?v=1630065867919" onclick="Gallery_view_imagclick(3)" id="thirdviewimg"><p>Playroom</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Freading%20room.jpg?v=1630065868049" onclick="Gallery_view_imagclick(4)" id="fourthviewimg"><p>Reading Room</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fclubhouse.jpg?v=1630065868547" onclick="Gallery_view_imagclick(5)" id="fifthviewimg"><p>Club House</p></div>
+   <!-- <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F2_copy%20(1).jpg?v=1630065869305" onclick="Gallery_view_imagclick(6)" id="sixthviewimg"><p>6Kids playroom area</p></div>  -->
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fdrawing%20room.jpg?v=1630065869703" onclick="Gallery_view_imagclick(7)" id="seventhviewimg"><p>Sample Flat Hall</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fgym.jpg?v=1630065870108" onclick="Gallery_view_imagclick(8)" id="seventhviewimg"><p>Gym</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fguest%20room%202.jpg?v=1630065870192" onclick="Gallery_view_imagclick(9)" id="seventhviewimg"><p>Guest Bedroom-1</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fguest%20room1.jpg?v=1630065870901" onclick="Gallery_view_imagclick(10)" id="seventhviewimg"><p>Guest Bedroom-2</p></div>
+  <!--  <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Flooby.jpg?v=1630065871705" onclick="Gallery_view_imagclick(11)" id="seventhviewimg"><p>11Guest room 1</p></div>  -->
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FHnet.com-image%20(1).jpg?v=1630065872391" onclick="Gallery_view_imagclick(12)" id="seventhviewimg"><p>Sample Flat Bedroom-1</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FBR2.jpg?v=1630065872796" onclick="Gallery_view_imagclick(13)" id="seventhviewimg"><p>Sample Flat Bedroom-2</p></div>
+  <!--  <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F6.jpg?v=1630065888875" onclick="Gallery_view_imagclick(14)" id="seventhviewimg"><p>14main gate 6</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F4.jpg?v=1630065889645" onclick="Gallery_view_imagclick(15)" id="seventhviewimg"><p>15Bedroom 3</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F7.jpg?v=1630065890248" onclick="Gallery_view_imagclick(16)" id="seventhviewimg"><p>16Bedroom 4</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F16.jpg?v=1630065890376" onclick="Gallery_view_imagclick(17)" id="seventhviewimg"><p>17Bedroom 5</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F17.jpg?v=1630065890590" onclick="Gallery_view_imagclick(18)" id="seventhviewimg"><p>18Bedroom 6</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F8.jpg?v=1630065890669" onclick="Gallery_view_imagclick(19)" id="seventhviewimg"><p>19Bedroom 7</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F3.jpg?v=1630065890758" onclick="Gallery_view_imagclick(20)" id="seventhviewimg"><p>20main gate4</p></div>  -->
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F5.jpg?v=1630065890795" onclick="Gallery_view_imagclick(21)" id="seventhviewimg"><p>Club House Lawn</p></div>
+   <!-- <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F9.jpg?v=1630065891907" onclick="Gallery_view_imagclick(22)" id="seventhviewimg"><p>22Bedroom 10</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F11.jpg?v=1630065892249" onclick="Gallery_view_imagclick(23)" id="seventhviewimg"><p>23Bedroom 11</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F10.jpg?v=1630065893061" onclick="Gallery_view_imagclick(24)" id="seventhviewimg"><p>24Bedroom 12</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F2.jpg?v=1630065893569" onclick="Gallery_view_imagclick(25)" id="seventhviewimg"><p>25main gate3</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F13.jpg?v=1630065894037" onclick="Gallery_view_imagclick(26)" id="seventhviewimg"><p>26Bedroom 14</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F15.jpg?v=1630065894124" onclick="Gallery_view_imagclick(27)" id="seventhviewimg"><p>27Bedroom 15</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F12.jpg?v=1630065894728" onclick="Gallery_view_imagclick(28)" id="seventhviewimg"><p>28Bedroom 16</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F14.jpg?v=1630065895222" onclick="Gallery_view_imagclick(29)" id="seventhviewimg"><p>29Bedroom 17</p></div>
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F1.jpg?v=1630065895744" onclick="Gallery_view_imagclick(30)" id="seventhviewimg"><p>30main gate2</p></div>  -->
+    <div id="test"><img src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FGPBK2231_1628782216380.JPG?v=1631365046200" onclick="Gallery_view_imagclick(31)" id="seventhviewimg"><p>Sample Flat Kitchen</p></div>   
+	</div>
+</div> 
+  
+  
+<!-- info tab  
+  
+  <div id="info_tab">
+    <div class="p-5">     
+    
+    <h1>Dream Aawas</h1>
+    <p>
+     MISSION
+    To be a leading developer in the Real Estate Business
+      Premium 2BHK Flats At Chinchbhawan Extension, Nagpur
+    </p>
+    <button class="btn btn-danger" onclick="close_info()">
+      <span class="material-icons" id="volume_down">&#xe5c9;</span>
+    </button>
+    </div>
+  </div>  -->  
+  
+<!-- drop down gallery   -->
+
+   <!--<select name="views" id="gallary" onchange="Gallery_view()">
+    <option value="img1">FrontView</option>
+    <option value="img2">wing</option>
+    <option value="img3">1st floor</option>
+    <option value="img4">2nd floor</option>
+    <option value="img5">Gym</option>
+    <option value="img6">Sports</option>
+    <option value="img7">Guest room</option>   
+  </select> -->
+  
+  <!--<div class="dropdown" id="gallary" >
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    Select Teleport Place
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li onclick="Gallery_view_imagclick(1)"><a class="dropdown-item" href="#">Gate view</a></li>
+    <li onclick="Gallery_view_imagclick(2)"><a class="dropdown-item" href="#">Clubhouse lane view</a></li>
+    <li onclick="Gallery_view_imagclick(3)"><a class="dropdown-item" href="#">Clubhouse G.F.</a></li>
+    <li onclick="Gallery_view_imagclick(4)"><a class="dropdown-item" href="#">Clubhouse F.F. Lane</a></li>
+    <li onclick="Gallery_view_imagclick(5)"><a class="dropdown-item" href="#">Gym</a></li>
+    <li onclick="Gallery_view_imagclick(6)"><a class="dropdown-item" href="#">Indoor sports room</a></li>
+    <li onclick="Gallery_view_imagclick(7)"><a class="dropdown-item" href="#">Guest room</a></li>
+    </ul>
+  </div>-->
+  
+  
+  <button type="button" id="gallary" onclick="openNcloseList()" class="btn btn-dark" style="height:35px;">
+   <!-- <span class="material-icons" id="close_theList">&#xe5c9;</span><span class="material-icons" id="expand_theList">&#xe5d2;</span>  -->
+    <p id="expand_theList">More</p><p id="close_theList" style="display:none">Less</p>
+  </button>
+  <ul class="nav flex-column" id="dropdown_menu">
+    <li onclick="Gallery_view_imagclick(1)" class="nav-item"><a class="nav-link" href="#">Gate view</a></li>
+    <li onclick="Gallery_view_imagclick(2)" class="nav-item"><a class="nav-link" href="#">Kids Playroom</a></li>
+    <li onclick="Gallery_view_imagclick(3)" class="nav-item"><a class="nav-link" href="#">Playroom</a></li>
+    <li onclick="Gallery_view_imagclick(4)" class="nav-item"><a class="nav-link" href="#">Reading Room</a></li>
+    <li onclick="Gallery_view_imagclick(5)" class="nav-item"><a class="nav-link" href="#">Club House</a></li>
+    <li onclick="Gallery_view_imagclick(7)" class="nav-item"><a class="nav-link" href="#">Sample Flat Hall</a></li>
+    <li onclick="Gallery_view_imagclick(8)" class="nav-item"><a class="nav-link" href="#">Gym</a></li>
+    <li onclick="Gallery_view_imagclick(9)" class="nav-item"><a class="nav-link" href="#">Guest Bedroom-1</a></li>
+    <li onclick="Gallery_view_imagclick(10)" class="nav-item"><a class="nav-link" href="#">Guest Bedroom-2</a></li>
+    <li onclick="Gallery_view_imagclick(12)" class="nav-item"><a class="nav-link" href="#">Sample Flat Bedroom-1</a></li>
+    <li onclick="Gallery_view_imagclick(13)" class="nav-item"><a class="nav-link" href="#">Sample Flat Bedroom-2</a></li>
+    <li onclick="Gallery_view_imagclick(21)" class="nav-item"><a class="nav-link" href="#">Club House Lawn</a></li>
+    <li onclick="Gallery_view_imagclick(31)" class="nav-item"><a class="nav-link" href="#">Sample Flat Kitchen</a></li>
+    <li onclick="map(1)" class="nav-item"><a class="nav-link" href="#">Master Plan</a></li>
+  </ul>
+
+  
+  
+<a-scene vr-mode-ui="enabled: false" >
+ <!-- <audio id="audio" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F1.%20bensound-memories.mp3?v=1631367710952"></audio>  -->
+	<a-assets id="imageSelector">  
+    <img id="point1" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fmain%20gate.jpg?v=1630065867703">
+    <img id="point2" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F3copy%20(1).jpg?v=1630065867576" >
+    <img id="point3" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FplayRoom.jpg?v=1630065867919" >
+    <img id="point4" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Freading%20room.jpg?v=1630065868049" >
+    <img id="point5" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fclubhouse.jpg?v=1630065868547" >
+    <img id="point6" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F2_copy%20(1).jpg?v=1630065869305" >
+    <img id="point7" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fdrawing%20room.jpg?v=1630065869703" >
+    <img id="point8" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fgym.jpg?v=1630065870108" >
+    <img id="point9" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fguest%20room%202.jpg?v=1630065870192" >
+    <img id="point10" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Fguest%20room1.jpg?v=1630065870901" >
+    <img id="point11" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2Flooby.jpg?v=1630065871705" >
+    <img id="point12" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FHnet.com-image%20(1).jpg?v=1630065872391">
+    <img id="point13" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FBR2.jpg?v=1630065872796" >
+    <img id="point14" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F6.jpg?v=1630065888875">
+    <img id="point15" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F4.jpg?v=1630065889645" >
+    <img id="point16" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F7.jpg?v=1630065890248" >
+    <img id="point17" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F16.jpg?v=1630065890376" >
+    <img id="point18" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F17.jpg?v=1630065890590" >
+    <img id="point19" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F8.jpg?v=1630065890669" >
+    <img id="point20" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F3.jpg?v=1630065890758" >
+    <img id="point21" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F5.jpg?v=1630065890795" >
+    <img id="point22" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F9.jpg?v=1630065891907" >
+    <img id="point23" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F11.jpg?v=1630065892249" >
+    <img id="point24" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F10.jpg?v=1630065893061" >
+    <img id="point25" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F2.jpg?v=1630065893569" >
+    <img id="point26" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F13.jpg?v=1630065894037" >
+    <img id="point27" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F15.jpg?v=1630065894124" >
+    <img id="point28" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F12.jpg?v=1630065894728" >
+    <img id="point29" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F14.jpg?v=1630065895222" >
+    <img id="point30" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F1.jpg?v=1630065895744" >
+    <img id="point31" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FGPBK2231_1628782216380.JPG?v=1631365046200">  
+	</a-assets>
+  
+  <a-assets><img id="hotspot" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FUntitled-13.png?v=1629994216202"></a-assets>
+
+	<a-sky id="skybox" src="#point1" rotation="0 90 0" opacity="1" >
+ 
+  </a-sky>
+
+  <!-- <a-image src="marker.png" position="-4 0 10"></a-image>  -->
+
+  
+	<a-entity id="spots" hotspots>
+        <a-entity  id="group-point1">
+         <a-image id="test" color="none" opacity="1"  spot="linkto:#point30;spotgroup:group-point2" position="0 -5 -40" rotation="70 180 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>               
+      <!--    <a-video src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F050722160-standing-man-shows-something-p.mp4?v=1629531075243" width="16" height="9" position="0 0 -20"></a-video> 
+     <!--   <a-entity geometry="primitive: ring; radiusInner: 0.5; radiusOuter: 1"
+            position="-4 0 10" material="color: red" spot="linkto:#point2;spotgroup:group-point2"></a-entity>  -->          
+        
+        
+
+      </a-entity>
+        </a-entity>
+        <a-entity id="group-point2" scale="0 0 0" val="maingate2">
+          <a-image id="test"  spot="linkto:#point14;spotgroup:group-point6" position="1 -4 -40" rotation="70 180 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point25;spotgroup:group-point3" position="45 -1 5" rotation="70 90 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point1;spotgroup:group-point1" position="-35 -1 -20" rotation="80 270 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <!-- <a-text spot="linkto:#point2;spotgroup:group-point2" value="Hello, World!" position="20 -4 -1" scale="4 4 4" color="red"></a-text>  --> 
+        </a-entity>
+        <a-entity id="group-point3" scale="0 0 0" val="maingate3">
+         <a-image id="test"  spot="linkto:#point30;spotgroup:group-point2" position="50 -2 0" rotation="70 90 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+         <a-image id="test"  spot="linkto:#point20;spotgroup:group-point4" position="-35 -2 0" rotation="65 90 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>      
+        </a-entity>
+        <a-entity id="group-point4" scale="0 0 0" val="maingate4">
+         <a-image id="test"  spot="linkto:#point21;spotgroup:group-point5" position="-1 -4 -35" rotation="80 180 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+         <a-image id="test"  spot="linkto:#point25;spotgroup:group-point3" position="-35 -4 0" rotation="80 270 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point5" scale="0 0 0" val="maingate5">
+          <a-image id="test"  spot="linkto:#point20;spotgroup:group-point4" position="35 -5 -11" rotation="80 90 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point14;spotgroup:group-point6" position="20 -7 30" rotation="80 0 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image> 
+        </a-entity>
+        <a-entity id="group-point6" scale="0 0 0" val="maingate6(outside club house)">
+          <a-image id="test"  spot="linkto:#point5;spotgroup:group-point7" position="-10 5 30" rotation="0 0 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point30;spotgroup:group-point2" position="2 -4 -30" rotation="70 180 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point21;spotgroup:group-point5" position="-35 -4 -4" rotation="70 270 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>         
+         <!-- <a-text spot="linkto:#point22;spotgroup:group-point19" value="SAMPLE FLAT" position="-16 5 -18" rotation="0 70 0" scale="8 8 8" color="red"></a-text>                     -->
+          <a-image id="test7" spot="linkto:#point22;spotgroup:group-point19" position="-25 9 -30" rotation="0 70 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point7" scale="0 0 0" val="club house ground floor">
+          <a-image id="test"  spot="linkto:#point27;spotgroup:group-point8" position="-23 -4 35" rotation="70 0 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point14;spotgroup:group-point6" position="23 -4 -4" rotation="70 90 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>        
+          <a-image id="test"  spot="linkto:#point29;spotgroup:group-point18" position="-20 -3 -7" rotation="90 270 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true" alt="backside of clubhouse"> </a-image>
+        </a-entity>
+        <a-entity id="group-point8" scale="0 0 0" val="club house first floor near stairs">
+          <a-image id="test"  spot="linkto:#point5;spotgroup:group-point7" position="-17 -8 -2" rotation="70 270 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point8;spotgroup:group-point9" position="12 -7 -20" rotation="90 90 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>   
+          <a-image id="test"  spot="linkto:#point17;spotgroup:group-point10" position="4 -8 -35" rotation="90 180 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point9" scale="0 0 0" val="gym">
+          <a-image id="test"  spot="linkto:#point27;spotgroup:group-point8" position="22 -4 -10" rotation="80 120 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+         <a-entity id="group-point10" scale="0 0 0" val="outside the reading room">
+          <a-image id="test"  spot="linkto:#point27;spotgroup:group-point8" position="-20 -4 -10" rotation="90 250 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point4;spotgroup:group-point11" position="-19 -5 7" rotation="90 0 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>   
+          <a-image id="test"  spot="linkto:#point18;spotgroup:group-point12" position="20 -2 10" rotation="90 90 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point11" scale="0 0 0" val="reading room">
+           <a-image id="test"  spot="linkto:#point17;spotgroup:group-point10" position="-15 -15 -18" rotation="90 150 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point12" scale="0 0 0" val="outside the guest room">
+          <a-image id="test"  spot="linkto:#point17;spotgroup:group-point10" position="-12 -3 -18" rotation="-90 30 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image> 
+          <a-image id="test"  spot="linkto:#point6;spotgroup:group-point15" position="-20 -5 15" rotation="80 300 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point10;spotgroup:group-point13" position="7 -3 20" rotation="90 40 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point9;spotgroup:group-point14" position="20 -5 7" rotation="90 130 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point13" scale="0 0 0" val="guest room (yellow)">
+           <a-image id="test"  spot="linkto:#point18;spotgroup:group-point12" position="15 -7 4" rotation="90 0 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point14" scale="0 0 0" val="guest room 2">
+           <a-image id="test"  spot="linkto:#point18;spotgroup:group-point12" position="7 -9 -20" rotation="90 110 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point15" scale="0 0 0" val="outside kids playroom area">
+          <a-image id="test"  spot="linkto:#point18;spotgroup:group-point12" position="-15 -3 3" rotation="90 270 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image> 
+          <a-image id="test"  spot="linkto:#point2;spotgroup:group-point17" position="-17 -6 -5" rotation="90 180 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point3;spotgroup:group-point16" position="15 -6 2" rotation="90 100 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>         
+        </a-entity>
+        <a-entity id="group-point16" scale="0 0 0" val="play room(table tenis)">
+           <a-image id="test"  spot="linkto:#point6;spotgroup:group-point15" position="-18 -7 2" rotation="90 -30 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point17" scale="0 0 0" val="kids play room area">
+           <a-image id="test"  spot="linkto:#point6;spotgroup:group-point15" position="16 -9 -13" rotation="90 180 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point18" scale="0 0 0" val="backside of clubhouse">
+           <a-image id="test"  spot="linkto:#point5;spotgroup:group-point7" position="0 -4 25" rotation="80 0 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point19" scale="0 0 0" val="sample flat outside door">
+          <a-image id="test"  spot="linkto:#point14;spotgroup:group-point6" position="-20 -5 6" rotation="90 270 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+          <a-image id="test"  spot="linkto:#point7;spotgroup:group-point20" position="-3 -8 16" rotation="90 0 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>
+        </a-entity>
+        <a-entity id="group-point20" scale="0 0 0" val="inside sample flat hall">
+          <a-image id="test"  spot="linkto:#point22;spotgroup:group-point19" position="-13 -10 10" rotation="90 0 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>            
+          <a-image id="test"  spot="linkto:#point31;spotgroup:group-point21" position="7 -10 -23" rotation="90 90 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>         
+          <a-image id="test" onclick="map(2)"  spot="linkto:#point7;spotgroup:group-point20" position="-8 -10 -23" rotation="90 180 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image> 
+        </a-entity>
+        <a-entity id="group-point21" scale="0 0 0" val="sample flat kitchen area">
+          <a-image id="test"  spot="linkto:#point7;spotgroup:group-point20" position="20 -7 0" rotation="90 180 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>            
+          <a-image id="test"  spot="linkto:#point13;spotgroup:group-point23" position="-24 -9 22" rotation="90 0 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>         
+          <a-image id="test"  spot="linkto:#point12;spotgroup:group-point22" position="-11 -9 22" rotation="90 0 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image> 
+        </a-entity>
+        <a-entity id="group-point22" scale="0 0 0" val="bedroom 1 white walls">
+          <a-image id="test"  spot="linkto:#point31;spotgroup:group-point21" position="3 -10 -20" rotation="90 170 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>                      
+        </a-entity>
+        <a-entity id="group-point23" scale="0 0 0" val="bedroom 2 blue table">
+          <a-image id="test"  spot="linkto:#point31;spotgroup:group-point21" position="-28 -10 -16" rotation="90 180 0" scale="6 6 6" animation="property: scale; to: 5 5 5; dur: 2000; easing: linear; loop: true"> </a-image>                      
+        </a-entity>
+        
+
+	<a-entity id="cam" camera position="0 1.6 0" touch-look-controls rotation-reader>          
+        <a-entity cursor="rayOrigin: mouse" >
+        </a-entity>         
+</a-entity>
+    
+    
+</a-scene>
+
+  <audio controls loop id="audiobg" src="https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2F1.%20bensound-memories.mp3?v=1631367710952"></audio>
+
+  
+<script>
+  
+//for dropdown menu
+// Add slideDown animation to Bootstrap dropdown when expanding.
+  $('.dropdown').on('show.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+  });
+
+  // Add slideUp animation to Bootstrap dropdown when collapsing.
+  $('.dropdown').on('hide.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+  });
+  
+  //for video on plane
+ /* document.addEventListener('click', () => {
+    video = document.querySelector('video');
+    video.play();
+});*/
+  
+//image lazy loading
+  
+/*  function lazyImage() {
+  var images = document.querySelectorAll("#imageSelector img");
+  for(var i = 0; i < images.length; i++)
+  {
+    images[i].src = images[i].getAttribute('data-src');
+  }
+}
+
+ function imagelazyloader(){
+    $("#point3").attr("src","https://cdn.glitch.com/a6a00443-9b1e-4670-9147-ed5eb383156c%2FplayRoom.jpg?v=1630065867919");
+ }   */
+  
+
+  //zoom in and out of camera
+    function changeimage(){
+    $("#cam").attr("animation","property: camera.zoom; from: 1; to: 2; dur: 1000; easing: easeInOutQuad; loop: 1; dir: alternate;");
+   setTimeout(resetall, 3000);
+  }
+  
+  function resetall(){
+     $("#cam").removeAttr("animation");
+  }
+  
+  
+ </script>
+  
+</body>
+</html>
+
+
